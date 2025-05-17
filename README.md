@@ -1,42 +1,53 @@
+# Jenkins Pipeline for Java Maven Project Deployment
 
-## 🧰 Prerequisites
+This project uses a Jenkins Declarative Pipeline to automate building, testing, packaging, and deploying a Java-based web application using Apache Maven, Nexus, and Tomcat.
 
-- Jenkins installed and running
-- Java (OpenJDK 17+)
-- User `cloudadmin` with appropriate permissions
-- Internet access for downloading Maven & Tomcat
+## Pipeline Stages Explained
 
-## 🚀 Jenkins Pipeline Stages
+### 1. Checkout Code
+Fetches the code from the GitHub repository (`https://github.com/Rahul-training/Devops`).
 
-### 1. Install Maven
-Downloads and extracts Maven 3.9.4.
+### 2. Maven Installation
+Downloads and extracts Apache Maven 3.9.4 into the Jenkins workspace.
 
-### 2. Compile Application
-Compiles Java code using Maven.
+### 3. Compile Sample Application
+Compiles the Java project using Maven.
 
-### 3. Test Application
-Runs unit tests using Maven.
+### 4. Test Sample Application
+Runs unit tests on the project.
 
-### 4. Package Application
-Packages the app as a WAR file.
+### 5. Package Sample Application
+Packages the application into a `.war` file for deployment.
 
-### 5. Install Prerequisites
-Installs Java runtime (OpenJDK 17).
+### 6. Nexus Artifact Upload
+Uploads the `.war` file to a Nexus repository for artifact management.
 
-### 6. Install Apache Tomcat
-- Downloads Tomcat 8.5.24
-- Extracts and configures:
-  - `tomcat-users.xml` for GUI authentication
-  - `context.xml` for remote access
-  - Changes Tomcat port to 8081
+### 7. Upload Nexus Artifact (Duplicate stage)
+This stage duplicates the previous upload logic and can be merged or removed based on use case.
 
-### 7. Deploy WAR to Tomcat
-- Copies `addressbook.war` to `webapps/`
-- Starts Tomcat server under `cloudadmin` user
+### 8. Tomcat Prerequisites Installation
+Installs Java Runtime Environment (JRE) required for running Tomcat.
 
-## 🛠 Configuration Files
+### 9. Install Apache Tomcat Server
+Downloads and configures Tomcat 8.5.24, including user roles and port changes.
 
-### `tomcat-users.xml`
+### 10. Deploy Sample Application To Tomcat Server
+Copies the WAR file to Tomcat's `webapps` directory and starts the server.
 
-```xml
-<user username="cloudadmin" password="ansibleawx@123" roles="manager-gui,admin-gui,manager-script"/>
+---
+
+## Requirements
+
+- Jenkins installed
+- Maven and Java installed on the Jenkins server (if not done in pipeline)
+- Nexus configured with appropriate credentials
+- Tomcat installation configuration files: `tomcat-users.xml` and `context.xml`
+- A user named `cloudadmin` (as used in `runuser`)
+- GitHub access permissions to the repo
+
+---
+
+## Notes
+
+- Update placeholders like `your-credentials-id`, `your.group.id`, `your-repo-name`, and `http://your-nexus-url` with your actual configuration.
+- Ensure the Jenkins user has sudo privileges for installation and service management commands.
